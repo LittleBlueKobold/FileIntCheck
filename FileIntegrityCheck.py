@@ -1,10 +1,11 @@
-from urllib.parse import urlparse   #module import
+import hashlib  # import module
 
-def detect_phishing(url):      #define phishing detection function
-    parsed_url = urlparse(url)
-    if 'login' in parsed_url.path or 'verify' in parsed_url.path:
-        return True
-    return False
+def get_file_hash(file_path, hash_algorithm='sha256'):  #define hashing algorithm
+    hash_func = hashlib.new(hash_algorithm)
+    with open(file_path, 'rb') as file:
+        while chunk := file.read(8192):
+            hash_func.update(chunk)
+    return hash_func.hexdigest()
 
-test_url = "http://phishing-example.com/login"   #website to test
-print(f"Phishing Detected: {detect_phishing(test_url)}")
+file_path = "important_file.txt"  #file to open/file path
+print(f"File Hash: {get_file_hash(file_path)}")
